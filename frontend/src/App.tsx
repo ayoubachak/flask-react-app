@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import axios from 'axios';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
+import useSocket from './hooks/useSocket';
 
 function App() {
-  const [count, setCount] = useState(0);
   const [users, setUsers] = useState([]);
   const [newUserName, setNewUserName] = useState('');
+  const socket = useSocket();
+  socket.on('test', () => {});
+
 
   const getUsers = () => {
     axios
-      .get('http://127.0.0.1:5000/users')
+      .get('http://localhost:5000/users')
       .then(response => {
         setUsers(response.data);
       })
@@ -24,7 +25,7 @@ function App() {
     const newUser = { name: newUserName };
 
     axios
-      .post('http://127.0.0.1:5000/users', newUser)
+      .post('http://localhost:5000/users', newUser)
       .then(response => {
         console.log(response.data);
         setNewUserName('');

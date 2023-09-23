@@ -1,7 +1,18 @@
-from flask import request, jsonify
-from app.api import api_bp
+import os
+from flask import request, jsonify, send_from_directory
+from app.api import html_views, api_bp
 from app.models import User
 from app.extensions import db
+
+@html_views.route('/', methods=['GET'])
+def index():
+    return send_from_directory(html_views.static_folder, 'index.html')
+
+@html_views.route('/assets/<path:filename>', methods=['GET'])
+def serve_static(filename):
+    return send_from_directory(os.path.join(html_views.static_folder, 'assets'), filename)
+
+
 
 @api_bp.route('/users', methods=['GET'])
 def get_users():
