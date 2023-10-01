@@ -21,8 +21,8 @@ const useSocket = () => {
   
       // Clean up event listeners
       return () => {
-        // socket.off('connect', handleConnect);
-        // socket.off('disconnect', handleDisconnect);
+        socket.off('connect', handleConnect);
+        socket.off('disconnect', handleDisconnect);
       };
     }, []);
   
