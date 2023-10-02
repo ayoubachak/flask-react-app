@@ -1,18 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Home from './views/Home';
 import Footer from './components/Footer';
 
-function App() {
+interface AppProps {
+  View: React.FC;
+}
+
+const  App : React.FC<AppProps> = ({View}) => {
+  
+  useEffect(() => {
+    document.title = 'IPS IHM';
+  }, []);
 
   return (
     <>
-      <Header/>
-      <Home/>
-      <Footer/>
+      <View/>
     </>
-  );
+  )
 }
 
 export default App;

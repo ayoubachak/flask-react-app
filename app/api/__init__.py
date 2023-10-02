@@ -8,3 +8,4 @@ serial_ports_api = Blueprint('Serial Ports', __name__, template_folder='../templ
 
 from app.api import views
 from app.api import serial_ports
+from app.api import serial_events

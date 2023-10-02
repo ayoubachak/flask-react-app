@@ -1,11 +1,13 @@
+from typing import Optional
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO
+from serial import Serial
 
 
 db = SQLAlchemy()
 
 #### async mode  #################################
-async_mode = None
+async_mode = 'threading' # None
 
 if async_mode is None:
     try:
@@ -37,3 +39,4 @@ elif async_mode == 'gevent':
 ################################
 
 socketio : SocketIO = SocketIO(cors_allowed_origins=['http://localhost:5173', 'http://localhost:5000'], async_mode=async_mode) # Still not sure about this server setup
+STM32_Conn : Optional[Serial] = None

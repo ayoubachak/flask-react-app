@@ -21,3 +21,13 @@ export const autodetectSTMPort =async (): Promise<Port> => {
     throw error;
   }
 };
+
+
+export const testSTMConnection = async (selectedPort: string): Promise<{ message: string }> => {
+  try {
+    const response = await api.post('/serial/testconnection', { selected_port: selectedPort });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

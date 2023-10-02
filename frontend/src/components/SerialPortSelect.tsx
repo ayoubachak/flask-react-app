@@ -1,8 +1,9 @@
 import axios from "axios";
 import useFetchSerialPorts from "../hooks/useFetchSerialPorts";
 import Port from "../types/Port";
-import { autodetectSTMPort } from "../services/services";
+import { autodetectSTMPort, testSTMConnection } from "../services/services";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 interface SerialPortSelectProps {
     selectedPort: Port | null;
     setSelectedPort: (port: Port | null) => void;
@@ -13,7 +14,8 @@ const SerialPortSelect: React.FC<SerialPortSelectProps> = ({
     setSelectedPort,
 }) => {
     const { serialPorts: ports, refresh } = useFetchSerialPorts();
-    const [autoDetected, setAutoDetected] = useState<Boolean | null>(null); 
+    const [connectionState, setConnectionState] = useState<Boolean | null>(null);
+    const navigate = useNavigate();
 
     const handlePortSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
       const selectedValue = event.target.value;
@@ -34,6 +36,19 @@ const SerialPortSelect: React.FC<SerialPortSelectProps> = ({
       const handleRefresh = ()=>{
         refresh();
       }
+      
+      const handleTestConnection = async () => {
+        try {
+            if ( selectedPort !== null){
+                await testSTMConnection(selectedPort?.name); // Replace 'COM3' with the selected port
+                setConnectionState(true);
+                navigate('/control/'+selectedPort.name);
+            }
+        } catch (error : any) {
+            setConnectionState(false);
+            alert(`Error: ${error.message}`);
+        }
+      };
 
     return (
       <div className="setting-section" style={{ flex: "flex-start" }}>
@@ -57,7 +72,13 @@ const SerialPortSelect: React.FC<SerialPortSelectProps> = ({
         <button className="m15" onClick={handleAutoDetect} >
         Auto-Detect Port
         </button>
-        <button className="m15">Test Connection</button>
+        <button className="m15" onClick={handleTestConnection}>
+            {
+                connectionState !== null ? 
+                    connectionState ? 'Connected' : 'Not Connected'
+                :"Test Connection" 
+            }
+        </button>
       </div>
     );
   };
